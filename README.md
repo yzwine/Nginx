@@ -52,7 +52,7 @@ http      #http块
 3.2.反向代理案例讲解
 原本从200.200.6.53服务器上获取数据，但出于安全性或者其他因素考虑，不直接从该服务器上获取数据，搭建一个代理服务器（192.168.1.1），访问代理服务器，代理服务器去原始服务器获取数据。
 
-#①.访问192.168.1.1:8080/ssmDemo/getdata --> 200.200.6.53:8221/ssmDemo/getdata
+①.访问192.168.1.1:8080/ssmDemo/getdata --> 200.200.6.53:8221/ssmDemo/getdata
 
 	server {
         listen       8080;
@@ -70,35 +70,33 @@ http      #http块
 
 ②.访问192.168.1.1:8080/cip-cas/getdata --> 200.200.6.53:8443/cip-cas/getdata
 
-···
-	server {
-        listen       8080;
-        server_name  localhost;
+server {
+	listen       8080;
+	server_name  localhost;
 
-        location /cip-cas {
+	location /cip-cas {
 			#index index.jsp;
 			#root   /root; 
 			proxy_pass	 http://200.200.6.53:8443/cip-cas/;
 			proxy_set_header	X-real-ip $remote_addr;
-            proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
+	    proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
 			proxy_connect_timeout 5s; 
-        }
+	}
 }
-···
 ③.访问192.168.1.1:8080/Chapter1/getdata --> 200.200.6.53:9090/getdata
 
-	server {
-        listen       8080;
-        server_name  localhost;
+server {
+	listen       8080;
+	server_name  localhost;
 
-        location /Chapter [1-5] {
+	location /Chapter [1-5] {
 			#index index.jsp;
 			#root   /root; 
 			proxy_pass	 http://200.200.6.53:9090/;
 			proxy_set_header	X-real-ip $remote_addr;
-            proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
+	    proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
 			proxy_connect_timeout 5s; 
-        }
+	}
 }
 
 (配置文件详解：https://www.cnblogs.com/hunttown/p/5759959.html )
