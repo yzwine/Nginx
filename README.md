@@ -1,9 +1,12 @@
 Nginx反向代理配置以及部署
+
 1.nginx介绍
+
 （介绍地址：http://www.nginx.cn/nginxchswhyuseit）
 nginx（发音"engine x"）是俄罗斯软件工程师Igor Sysoev开发的免费开源web服务器软件。nginx于2004年发布，聚焦于高性能，高并发和低内存消耗问题。并且具有多种web服务器功能特性：负载均衡，缓存，访问控制，带宽控制，以及高效整合各种应用的能力，这些特性使nginx很适合于现代网站架构。目前，nginx已经是互联网上第二流行的开源web服务器软件。
 
 1.1.nginx主要功能
+
 ①.反向代理。
 代理服务器将接收到的用户请求转发给内部服务器，再将内部服务器返回的结果返回给用户，此时代理服务器就充当一个服务器的角色。
 
@@ -83,6 +86,7 @@ server {
 			proxy_connect_timeout 5s; 
 	}
 }
+
 ③.访问192.168.1.1:8080/Chapter1/getdata --> 200.200.6.53:9090/getdata
 
 server {
@@ -105,46 +109,78 @@ server {
 proxy_set_header：就是可设置请求头-并将头信息传递到服务器端。不属于请求头的参数中也需要传递时 重定义下就行啦。
 
 以下配置用于获取客户端（访问者）的ip地址：
+
 1.proxy_pass	 http://200.200.6.53:9090/;
+
 请求转向的服务器，如上转入的服务器地址为http://200.200.6.53:9090/，也可用列表的形式。
 
 2.proxy_set_header    X-real-ip $remote_addr;
+
 将$remote_addr的值放进变量X-Real-IP中，此变量名可变，$remote_addr的值为客户端的ip，设置代理服务器的IP地址为客户端地址。
 
 3.proxy_set_header            X-Forwarded-For $proxy_add_x_forwarded_for;
   	把客户端的真是ip地址发送给服务器。
 
 4.proxy_connect_timeout 5s;
+
 连接超时时间为5秒。
+
 3.3.启动关闭nginx
+
 ①.Windows环境下
+
 方法一：双击nginx.exe应用程序，即可开启nginx服务（关闭比较麻烦）
 
 方法二：nginx命令开启
+
 1、启动：
+
 C:\server\nginx-1.0.2>start nginx
+
 或
+
 C:\server\nginx-1.0.2>nginx.exe
+
 2、停止：
+
 C:\server\nginx-1.0.2>nginx.exe -s stop
+
 或
+
 C:\server\nginx-1.0.2>nginx.exe -s quit
+
 注：stop是快速停止nginx，可能并不保存相关信息；quit是完整有序的停止nginx，并保存相关信息。
+
 3、重新载入Nginx：
+
 C:\server\nginx-1.0.2>nginx.exe -s reload
+
 当配置信息修改，需要重新载入这些配置时使用此命令。
+
 ②.Linux环境下
+
 1>.下载nginx（可能涉及到权限，用：chown cmreadwh 修改用户权限）
+
 Linux下载先需要安装nginx应用程序
+
 ./configure
+
 make
+
 (sudo) make install
+
 错误提示：
+
 一、若出现该错误（./configure: error: the HTTP gzip module requires the zlib library.）
+
 则需要安装“zlib-devel”，运行以下命令即可
+
 yum install -y zlib-devel
+
 二、若出现该错误（./configure: error: the HTTP rewrite module requires the PCRE library.）
+
 则需要安装“pcre-deve”，运行以下命令即可
+
 yum -y install pcre-devel
 
 
@@ -152,21 +188,34 @@ yum -y install pcre-devel
 2>.修改nginx下的配置
 
 3>.启动关闭nginx
+
 1、启动：./sbin/nginx
+
 2、停止：./sbin/nginx-s stop
+
 3、重新载入Nginx：./sbin/nginx -s reload
+
 3.4.nginx启动成功失败相关讲解
+
 打开localhost，跳出nginx页面则启动成功，如下：
 
+
 如打不开网页则配置有问题。
+
 
 或看log下的错误日志
 
 
 根据错误日志，修改配置，实现反向代理功能。
+
 4.参考文献
+
 https://www.cnblogs.com/knowledgesea/p/5175711.html
+
 https://www.cnblogs.com/zhouxinfei/p/7862285.html
+
 https://www.cnblogs.com/Miss-mickey/p/6734831.html
+
 https://www.cnblogs.com/sixiweb/p/3988805.html
+
 http://www.nginx.cn/nginxchswhyuseit
